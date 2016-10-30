@@ -13,23 +13,9 @@ public class GeneticEvolution {
 
     public static final int popultaion_size = 100;
 
-    private static final int best_characters_size = 10;
-
-    private static final int characters_to_kill = 50;
-
-    private static final int characters_to_reproduction = 40;
-
     //GENETIC EVOLUTION PARAMETERS
 
-    private static final double div_pos = 0.5;
-
     private static final double mutation_pos = 0.01;
-
-    private static final double lower_iterations_limit = 100;
-
-    private static final double upper_iterations_limit = 10000;
-
-    private static final double population_diff_sum_limit = 20;
 
     //TASK LIMITS
 
@@ -50,22 +36,22 @@ public class GeneticEvolution {
         List<Double> iterationResults = new ArrayList<Double>();
         int iterationNumber = 0;
         while (true){
-
-            //population iteration produces to much zeros.
-
             newPopulationGroup = populationIteration(newPopulationGroup);
             //generate new 50 chromosomes
             newPopulationGroup.addAll(generateRandomChromosoms(50));
 
             double populationIterationSum = 0;
+
             for(Chromosom chromosom : newPopulationGroup){
                 populationIterationSum += geneticFunction.getFunctionResult(chromosom.getChromosomValue());
             }
+
             iterationResults.add(populationIterationSum);
 
             if(shouldEndEvolution(iterationNumber)){
                 break;
             }
+
             iterationNumber++;
         }
         return findTheBestCharacter(newPopulationGroup);
@@ -153,23 +139,8 @@ public class GeneticEvolution {
             return 1;
     }
 
-    private boolean shouldSetBestCharacter(Chromosom currentBest, Chromosom candidate){
-        return geneticFunction.getFunctionResult(candidate.getChromosomValue()) <
-                geneticFunction.getFunctionResult(currentBest.getChromosomValue()) &&
-                candidate.getChromosomValue() < upperLimitNumber &&
-                candidate.getChromosomValue() > lowerLimitNumber;
-    }
-
     private  boolean shouldMutate(){
         return Generator.generateRandomDoubleWithLimits(0, 1) < mutation_pos;
-    }
-
-    private  boolean shouldCross(){
-        return Generator.generateRandomDoubleWithLimits(0, 1) < div_pos;
-    }
-
-    private  void killWorst(List<Chromosom> chromosoms, Chromosom chromToKill){
-        chromosoms.remove(chromToKill);
     }
 
     private  boolean shouldEndEvolution(int iterationNumber){
@@ -188,15 +159,6 @@ public class GeneticEvolution {
        return null;
     }
 
-    private List<Chromosom> killMissAdjustCharacter(List<Chromosom> chromosoms){
-        List<Chromosom> adjustedChroms = new ArrayList<Chromosom>();
-        for(Chromosom chromosom: chromosoms){
-            if(fulfilLimits(chromosom.getChromosomValue()))
-                adjustedChroms.add(chromosom);
-        }
-        return adjustedChroms;
-    }
-
     public Chromosom findTheBestCharacter(List<Chromosom> chromosoms){
         Chromosom theLowestChromosom = getFirstChromIncludingLimits(chromosoms);
         for(Chromosom chrom : chromosoms){
@@ -206,7 +168,5 @@ public class GeneticEvolution {
         }
         return theLowestChromosom;
     }
-
-
 
 }

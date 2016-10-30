@@ -15,7 +15,6 @@ public class ChromosomTest {
         double negativeValue = -23.45;
         double zero = 0;
 
-
         //when
         int[] positiveBits = Operations.changeIntoBits(positiveValue);
         int[] negativeBits = Operations.changeIntoBits(negativeValue);
